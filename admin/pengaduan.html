@@ -1,0 +1,2562 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pengaduan | Admin Desa Semparuk</title>
+
+    <meta name="description" content="Kelola pengaduan masyarakat Desa Semparuk">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        :root{
+            --blue-900:#0b2d4d;
+            --blue-800:#10456f;
+            --blue-700:#17639a;
+            --blue-600:#256bb8;
+            --blue-500:#3a87d8;
+            --blue-100:#e8f3fe;
+            --blue-50:#f4f9ff;
+
+            --white:#ffffff;
+            --text:#16324a;
+            --muted:#718397;
+            --border:#e2ebf3;
+
+            --green:#16834b;
+            --green-bg:#edf9f2;
+
+            --orange:#b96b00;
+            --orange-bg:#fff6e5;
+
+            --red:#c0392b;
+            --red-bg:#fff0ee;
+
+            --shadow:0 15px 45px rgba(8,45,77,.08);
+        }
+
+        body{
+            min-height:100vh;
+            font-family:Arial,Helvetica,sans-serif;
+            color:var(--text);
+            background:#f5f9fd;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar{
+            position:fixed;
+            top:0;
+            left:0;
+            width:250px;
+            height:100vh;
+            background:
+                linear-gradient(
+                    180deg,
+                    var(--blue-900),
+                    var(--blue-800)
+                );
+            color:white;
+            z-index:1000;
+            display:flex;
+            flex-direction:column;
+        }
+
+        .sidebar-brand{
+            padding:27px 23px;
+            border-bottom:1px solid rgba(255,255,255,.10);
+        }
+
+        .brand-logo{
+            width:45px;
+            height:45px;
+            border-radius:13px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:rgba(255,255,255,.13);
+            font-family:Georgia,"Times New Roman",serif;
+            font-size:18px;
+            font-weight:bold;
+            margin-bottom:12px;
+        }
+
+        .sidebar-brand h1{
+            font-family:Georgia,"Times New Roman",serif;
+            font-size:19px;
+            margin-bottom:4px;
+        }
+
+        .sidebar-brand p{
+            color:rgba(255,255,255,.63);
+            font-size:11px;
+        }
+
+        .sidebar-menu{
+            padding:20px 12px;
+            flex:1;
+            overflow-y:auto;
+        }
+
+        .menu-title{
+            color:rgba(255,255,255,.38);
+            font-size:10px;
+            font-weight:bold;
+            text-transform:uppercase;
+            letter-spacing:1px;
+            padding:0 12px;
+            margin:8px 0 10px;
+        }
+
+        .menu-link{
+            display:flex;
+            align-items:center;
+            gap:12px;
+            padding:12px 13px;
+            margin-bottom:4px;
+            border-radius:11px;
+            color:rgba(255,255,255,.72);
+            text-decoration:none;
+            font-size:13px;
+            transition:.2s ease;
+        }
+
+        .menu-link:hover{
+            color:white;
+            background:rgba(255,255,255,.08);
+        }
+
+        .menu-link.active{
+            color:white;
+            background:rgba(255,255,255,.13);
+            box-shadow:inset 3px 0 0 #8ec4f2;
+        }
+
+        .menu-icon{
+            width:20px;
+            text-align:center;
+            font-size:15px;
+        }
+
+        .sidebar-bottom{
+            padding:15px 12px;
+            border-top:1px solid rgba(255,255,255,.10);
+        }
+
+        .logout-button{
+            width:100%;
+            border:none;
+            background:rgba(255,255,255,.08);
+            color:rgba(255,255,255,.75);
+            border-radius:11px;
+            padding:12px;
+            cursor:pointer;
+            font-size:12px;
+        }
+
+        .logout-button:hover{
+            background:rgba(255,255,255,.14);
+            color:white;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main{
+            margin-left:250px;
+            min-height:100vh;
+        }
+
+        .topbar{
+            height:76px;
+            background:white;
+            border-bottom:1px solid var(--border);
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:0 32px;
+            position:sticky;
+            top:0;
+            z-index:100;
+        }
+
+        .page-heading h2{
+            font-family:Georgia,"Times New Roman",serif;
+            color:var(--blue-900);
+            font-size:22px;
+            margin-bottom:3px;
+        }
+
+        .page-heading p{
+            color:var(--muted);
+            font-size:11px;
+        }
+
+        .admin-profile{
+            display:flex;
+            align-items:center;
+            gap:10px;
+        }
+
+        .admin-avatar{
+            width:38px;
+            height:38px;
+            border-radius:50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:var(--blue-100);
+            color:var(--blue-700);
+            font-weight:bold;
+            font-size:13px;
+        }
+
+        .admin-info strong{
+            display:block;
+            color:var(--blue-900);
+            font-size:12px;
+        }
+
+        .admin-info span{
+            color:var(--muted);
+            font-size:10px;
+        }
+
+        .content{
+            padding:30px 32px 45px;
+            max-width:1500px;
+        }
+
+        /* =========================
+           MESSAGE
+        ========================= */
+
+        .message{
+            display:none;
+            margin-bottom:20px;
+            padding:13px 16px;
+            border-radius:12px;
+            font-size:13px;
+            line-height:1.5;
+        }
+
+        .message.show{
+            display:block;
+        }
+
+        .message.error{
+            background:var(--red-bg);
+            border:1px solid #f3cbc6;
+            color:#8e2b21;
+        }
+
+        .message.success{
+            background:var(--green-bg);
+            border:1px solid #c8e8d6;
+            color:#17643b;
+        }
+
+        /* =========================
+           STATS
+        ========================= */
+
+        .stats{
+            display:grid;
+            grid-template-columns:repeat(4,1fr);
+            gap:16px;
+            margin-bottom:25px;
+        }
+
+        .stat-card{
+            background:white;
+            border:1px solid var(--border);
+            border-radius:17px;
+            padding:20px;
+            box-shadow:var(--shadow);
+        }
+
+        .stat-top{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:13px;
+        }
+
+        .stat-label{
+            color:var(--muted);
+            font-size:11px;
+            font-weight:600;
+        }
+
+        .stat-icon{
+            width:35px;
+            height:35px;
+            border-radius:10px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:var(--blue-100);
+            font-size:15px;
+        }
+
+        .stat-value{
+            color:var(--blue-900);
+            font-family:Georgia,"Times New Roman",serif;
+            font-size:27px;
+            font-weight:bold;
+        }
+
+        /* =========================
+           TOOLBAR
+        ========================= */
+
+        .panel{
+            background:white;
+            border:1px solid var(--border);
+            border-radius:18px;
+            box-shadow:var(--shadow);
+            overflow:hidden;
+        }
+
+        .panel-header{
+            padding:21px 22px;
+            border-bottom:1px solid var(--border);
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:15px;
+        }
+
+        .panel-title h3{
+            font-family:Georgia,"Times New Roman",serif;
+            color:var(--blue-900);
+            font-size:18px;
+            margin-bottom:4px;
+        }
+
+        .panel-title p{
+            color:var(--muted);
+            font-size:11px;
+        }
+
+        .refresh-button{
+            border:1px solid #d6e5f1;
+            background:white;
+            color:var(--blue-700);
+            padding:9px 13px;
+            border-radius:9px;
+            cursor:pointer;
+            font-size:11px;
+            font-weight:600;
+        }
+
+        .refresh-button:hover{
+            background:var(--blue-50);
+        }
+
+        .toolbar{
+            padding:17px 22px;
+            border-bottom:1px solid var(--border);
+            display:flex;
+            gap:10px;
+            align-items:center;
+        }
+
+        .search-box{
+            flex:1;
+            position:relative;
+        }
+
+        .search-box span{
+            position:absolute;
+            left:13px;
+            top:50%;
+            transform:translateY(-50%);
+            color:var(--muted);
+            font-size:13px;
+        }
+
+        .search-box input,
+        .filter-select{
+            height:42px;
+            border:1px solid #dce7f0;
+            background:#f9fcff;
+            border-radius:10px;
+            outline:none;
+            color:var(--text);
+            font-size:12px;
+        }
+
+        .search-box input{
+            width:100%;
+            padding:0 12px 0 36px;
+        }
+
+        .filter-select{
+            padding:0 12px;
+            min-width:150px;
+        }
+
+        .search-box input:focus,
+        .filter-select:focus{
+            border-color:var(--blue-500);
+            box-shadow:0 0 0 3px rgba(58,135,216,.08);
+        }
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-wrap{
+            overflow-x:auto;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            min-width:850px;
+        }
+
+        th{
+            text-align:left;
+            padding:13px 18px;
+            background:#f8fbfe;
+            color:#718397;
+            font-size:10px;
+            text-transform:uppercase;
+            letter-spacing:.5px;
+            font-weight:700;
+            border-bottom:1px solid var(--border);
+            white-space:nowrap;
+        }
+
+        td{
+            padding:15px 18px;
+            border-bottom:1px solid #edf2f6;
+            font-size:12px;
+            color:#38536a;
+            vertical-align:middle;
+        }
+
+        tbody tr:hover{
+            background:#fbfdff;
+        }
+
+        .complaint-id{
+            color:var(--blue-700);
+            font-size:11px;
+            font-weight:bold;
+        }
+
+        .complaint-name{
+            color:var(--blue-900);
+            font-weight:700;
+            margin-bottom:3px;
+        }
+
+        .complaint-contact{
+            color:var(--muted);
+            font-size:10px;
+        }
+
+        .complaint-text{
+            max-width:260px;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+        }
+
+        .badge{
+            display:inline-flex;
+            align-items:center;
+            padding:6px 9px;
+            border-radius:20px;
+            font-size:10px;
+            font-weight:700;
+            white-space:nowrap;
+        }
+
+        .badge.diterima{
+            background:var(--blue-100);
+            color:var(--blue-700);
+        }
+
+        .badge.diproses{
+            background:var(--orange-bg);
+            color:var(--orange);
+        }
+
+        .badge.selesai{
+            background:var(--green-bg);
+            color:var(--green);
+        }
+
+        .badge.ditolak{
+            background:var(--red-bg);
+            color:var(--red);
+        }
+
+        .action-button{
+            border:none;
+            background:var(--blue-100);
+            color:var(--blue-700);
+            padding:7px 10px;
+            border-radius:8px;
+            font-size:10px;
+            font-weight:700;
+            cursor:pointer;
+        }
+
+        .action-button:hover{
+            background:#d6eafd;
+        }
+
+        .empty{
+            text-align:center;
+            padding:55px 20px;
+            color:var(--muted);
+        }
+
+        .empty-icon{
+            font-size:35px;
+            margin-bottom:12px;
+            opacity:.65;
+        }
+
+        .empty strong{
+            display:block;
+            color:var(--blue-900);
+            margin-bottom:5px;
+            font-size:13px;
+        }
+
+        .empty span{
+            font-size:11px;
+        }
+
+        /* =========================
+           MODAL
+        ========================= */
+
+        .modal{
+            position:fixed;
+            inset:0;
+            background:rgba(6,31,52,.55);
+            display:none;
+            align-items:center;
+            justify-content:center;
+            padding:20px;
+            z-index:2000;
+            backdrop-filter:blur(4px);
+        }
+
+        .modal.show{
+            display:flex;
+        }
+
+        .modal-card{
+            width:100%;
+            max-width:620px;
+            max-height:90vh;
+            overflow-y:auto;
+            background:white;
+            border-radius:20px;
+            box-shadow:0 30px 90px rgba(0,0,0,.2);
+        }
+
+        .modal-header{
+            padding:20px 22px;
+            border-bottom:1px solid var(--border);
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            gap:15px;
+        }
+
+        .modal-header h3{
+            font-family:Georgia,"Times New Roman",serif;
+            color:var(--blue-900);
+            font-size:19px;
+            margin-bottom:4px;
+        }
+
+        .modal-header p{
+            color:var(--muted);
+            font-size:10px;
+        }
+
+        .close-modal{
+            width:32px;
+            height:32px;
+            border:none;
+            border-radius:8px;
+            background:#f2f6fa;
+            color:#607487;
+            cursor:pointer;
+            font-size:17px;
+        }
+
+        .modal-body{
+            padding:22px;
+        }
+
+        .detail-grid{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:15px;
+            margin-bottom:20px;
+        }
+
+        .detail-item{
+            padding:13px;
+            background:#f8fbfe;
+            border:1px solid #e9f0f5;
+            border-radius:11px;
+        }
+
+        .detail-item.full{
+            grid-column:1 / -1;
+        }
+
+        .detail-label{
+            color:var(--muted);
+            font-size:9px;
+            text-transform:uppercase;
+            letter-spacing:.5px;
+            font-weight:bold;
+            margin-bottom:6px;
+        }
+
+        .detail-value{
+            color:var(--blue-900);
+            font-size:12px;
+            line-height:1.6;
+            word-break:break-word;
+        }
+
+        .modal-section{
+            margin-top:20px;
+            padding-top:20px;
+            border-top:1px solid var(--border);
+        }
+
+        .modal-section h4{
+            color:var(--blue-900);
+            font-size:13px;
+            margin-bottom:11px;
+        }
+
+        .form-label{
+            display:block;
+            color:var(--blue-900);
+            font-size:11px;
+            font-weight:700;
+            margin-bottom:7px;
+        }
+
+        .form-control{
+            width:100%;
+            border:1px solid #dce7f0;
+            background:#f9fcff;
+            border-radius:10px;
+            padding:11px 12px;
+            outline:none;
+            color:var(--text);
+            font-family:Arial,Helvetica,sans-serif;
+            font-size:12px;
+        }
+
+        .form-control:focus{
+            border-color:var(--blue-500);
+            box-shadow:0 0 0 3px rgba(58,135,216,.08);
+        }
+
+        textarea.form-control{
+            min-height:100px;
+            resize:vertical;
+        }
+
+        .modal-actions{
+            display:flex;
+            justify-content:flex-end;
+            gap:9px;
+            margin-top:14px;
+        }
+
+        .btn{
+            border:none;
+            border-radius:9px;
+            padding:10px 14px;
+            font-size:11px;
+            font-weight:700;
+            cursor:pointer;
+        }
+
+        .btn-secondary{
+            background:#eef3f7;
+            color:#5d7182;
+        }
+
+        .btn-primary{
+            background:linear-gradient(135deg,var(--blue-700),var(--blue-500));
+            color:white;
+            box-shadow:0 7px 18px rgba(37,107,184,.18);
+        }
+
+        .btn-success{
+            background:var(--green);
+            color:white;
+        }
+
+        .btn:disabled{
+            opacity:.6;
+            cursor:not-allowed;
+        }
+
+        .reply-list{
+            display:flex;
+            flex-direction:column;
+            gap:10px;
+            margin-bottom:15px;
+        }
+
+        .reply{
+            padding:12px;
+            background:#f7fbff;
+            border:1px solid #e4eef6;
+            border-radius:10px;
+        }
+
+        .reply-head{
+            display:flex;
+            justify-content:space-between;
+            gap:10px;
+            margin-bottom:5px;
+        }
+
+        .reply-sender{
+            color:var(--blue-700);
+            font-size:10px;
+            font-weight:bold;
+        }
+
+        .reply-time{
+            color:var(--muted);
+            font-size:9px;
+        }
+
+        .reply-text{
+            color:#486176;
+            font-size:11px;
+            line-height:1.6;
+        }
+
+        .no-reply{
+            color:var(--muted);
+            font-size:11px;
+            padding:10px 0;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        .mobile-menu{
+            display:none;
+            width:38px;
+            height:38px;
+            border:none;
+            border-radius:9px;
+            background:var(--blue-100);
+            color:var(--blue-700);
+            cursor:pointer;
+            font-size:18px;
+        }
+
+        @media(max-width:1000px){
+            .sidebar{
+                width:220px;
+            }
+
+            .main{
+                margin-left:220px;
+            }
+
+            .stats{
+                grid-template-columns:repeat(2,1fr);
+            }
+        }
+
+        @media(max-width:760px){
+            .sidebar{
+                transform:translateX(-100%);
+                transition:.25s ease;
+            }
+
+            .sidebar.open{
+                transform:translateX(0);
+            }
+
+            .main{
+                margin-left:0;
+            }
+
+            .topbar{
+                padding:0 18px;
+                gap:10px;
+            }
+
+            .mobile-menu{
+                display:block;
+                order:-1;
+            }
+
+            .admin-info{
+                display:none;
+            }
+
+            .content{
+                padding:22px 16px 35px;
+            }
+
+            .stats{
+                grid-template-columns:1fr 1fr;
+                gap:10px;
+            }
+
+            .stat-card{
+                padding:15px;
+            }
+
+            .stat-value{
+                font-size:23px;
+            }
+
+            .panel-header{
+                align-items:flex-start;
+            }
+
+            .toolbar{
+                flex-direction:column;
+                align-items:stretch;
+            }
+
+            .filter-select{
+                width:100%;
+            }
+
+            .detail-grid{
+                grid-template-columns:1fr;
+            }
+
+            .detail-item.full{
+                grid-column:auto;
+            }
+        }
+
+        @media(max-width:480px){
+            .stats{
+                grid-template-columns:1fr 1fr;
+            }
+
+            .stat-label{
+                font-size:9px;
+            }
+
+            .stat-value{
+                font-size:21px;
+            }
+
+            .page-heading h2{
+                font-size:18px;
+            }
+
+            .page-heading p{
+                font-size:9px;
+            }
+
+            .panel-header{
+                padding:17px;
+            }
+
+            .toolbar{
+                padding:14px 17px;
+            }
+
+            .modal{
+                padding:10px;
+            }
+
+            .modal-card{
+                border-radius:16px;
+            }
+
+            .modal-body{
+                padding:17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-brand">
+            <div class="brand-logo">DS</div>
+
+            <h1>Desa Semparuk</h1>
+            <p>Panel Administrator</p>
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <div class="menu-title">Menu Utama</div>
+
+            <a href="dashboard.html" class="menu-link">
+                <span class="menu-icon">⌂</span>
+                Dashboard
+            </a>
+
+            <a href="pengaduan.html" class="menu-link active">
+                <span class="menu-icon">📋</span>
+                Pengaduan
+            </a>
+
+            <div class="menu-title">Konten Desa</div>
+
+            <a href="berita.html" class="menu-link">
+                <span class="menu-icon">📰</span>
+                Berita
+            </a>
+
+            <a href="galeri.html" class="menu-link">
+                <span class="menu-icon">▣</span>
+                Galeri
+            </a>
+
+            <div class="menu-title">Data Desa</div>
+
+            <a href="perangkat.html" class="menu-link">
+                <span class="menu-icon">👥</span>
+                Perangkat Desa
+            </a>
+
+            <a href="penduduk.html" class="menu-link">
+                <span class="menu-icon">♙</span>
+                Penduduk
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <button
+                type="button"
+                class="logout-button"
+                id="logoutButton"
+            >
+                ↪ Keluar dari Panel
+            </button>
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <button
+                type="button"
+                class="mobile-menu"
+                id="mobileMenu"
+                aria-label="Buka menu"
+            >
+                ☰
+            </button>
+
+            <div class="page-heading">
+                <h2>Pengaduan Masyarakat</h2>
+                <p>Kelola dan tindak lanjuti pengaduan masyarakat Desa Semparuk</p>
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="admin-avatar" id="adminAvatar">
+                    A
+                </div>
+
+                <div class="admin-info">
+                    <strong id="adminName">Admin Desa</strong>
+                    <span>Administrator</span>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <div class="content">
+
+            <div id="message" class="message"></div>
+
+
+            <!-- =========================
+                 STATISTIK
+            ========================= -->
+
+            <section class="stats">
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Total Pengaduan</span>
+                        <span class="stat-icon">📋</span>
+                    </div>
+
+                    <div class="stat-value" id="totalCount">
+                        0
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Diterima</span>
+                        <span class="stat-icon">📥</span>
+                    </div>
+
+                    <div class="stat-value" id="receivedCount">
+                        0
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Diproses</span>
+                        <span class="stat-icon">⏳</span>
+                    </div>
+
+                    <div class="stat-value" id="processCount">
+                        0
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Selesai</span>
+                        <span class="stat-icon">✓</span>
+                    </div>
+
+                    <div class="stat-value" id="doneCount">
+                        0
+                    </div>
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 DATA PENGADUAN
+            ========================= -->
+
+            <section class="panel">
+
+                <div class="panel-header">
+
+                    <div class="panel-title">
+                        <h3>Daftar Pengaduan</h3>
+                        <p>Data pengaduan yang masuk dari masyarakat</p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="refresh-button"
+                        id="refreshButton"
+                    >
+                        ↻ Refresh Data
+                    </button>
+
+                </div>
+
+
+                <div class="toolbar">
+
+                    <div class="search-box">
+                        <span>⌕</span>
+
+                        <input
+                            type="search"
+                            id="searchInput"
+                            placeholder="Cari nama, token, kategori, atau isi pengaduan..."
+                        >
+                    </div>
+
+                    <select
+                        id="statusFilter"
+                        class="filter-select"
+                    >
+                        <option value="">Semua Status</option>
+                        <option value="Diterima">Diterima</option>
+                        <option value="Diproses">Diproses</option>
+                        <option value="Selesai">Selesai</option>
+                        <option value="Ditolak">Ditolak</option>
+                    </select>
+
+                </div>
+
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>ID / Token</th>
+                                <th>Masyarakat</th>
+                                <th>Kategori</th>
+                                <th>Isi Pengaduan</th>
+                                <th>Tanggal</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="complaintTableBody">
+
+                            <tr>
+                                <td colspan="7">
+
+                                    <div class="empty">
+                                        <div class="empty-icon">⏳</div>
+                                        <strong>Memuat data...</strong>
+                                        <span>Mohon tunggu sebentar.</span>
+                                    </div>
+
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================
+         MODAL DETAIL
+    ========================= -->
+
+    <div
+        class="modal"
+        id="detailModal"
+    >
+
+        <div class="modal-card">
+
+            <div class="modal-header">
+
+                <div>
+                    <h3>Detail Pengaduan</h3>
+                    <p id="modalToken">-</p>
+                </div>
+
+                <button
+                    type="button"
+                    class="close-modal"
+                    id="closeModal"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div class="detail-grid">
+
+                    <div class="detail-item">
+                        <div class="detail-label">Nama</div>
+                        <div class="detail-value" id="detailNama">-</div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">Kontak</div>
+                        <div class="detail-value" id="detailKontak">-</div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">Kategori</div>
+                        <div class="detail-value" id="detailKategori">-</div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">Tanggal</div>
+                        <div class="detail-value" id="detailTanggal">-</div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">ID Pengaduan</div>
+                        <div class="detail-value" id="detailId">-</div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">Status</div>
+                        <div class="detail-value" id="detailStatus">-</div>
+                    </div>
+
+                    <div class="detail-item full">
+
+                        <div class="detail-label">
+                            Isi Pengaduan
+                        </div>
+
+                        <div
+                            class="detail-value"
+                            id="detailIsi"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="modal-section">
+
+                    <h4>Perbarui Status</h4>
+
+                    <label
+                        class="form-label"
+                        for="statusSelect"
+                    >
+                        Status Pengaduan
+                    </label>
+
+                    <select
+                        id="statusSelect"
+                        class="form-control"
+                    >
+                        <option value="Diterima">Diterima</option>
+                        <option value="Diproses">Diproses</option>
+                        <option value="Selesai">Selesai</option>
+                        <option value="Ditolak">Ditolak</option>
+                    </select>
+
+                    <div class="modal-actions">
+
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            id="updateStatusButton"
+                        >
+                            Simpan Status
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BALASAN -->
+
+                <div class="modal-section">
+
+                    <h4>Riwayat Balasan</h4>
+
+                    <div
+                        class="reply-list"
+                        id="replyList"
+                    >
+                        <div class="no-reply">
+                            Belum ada balasan.
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- FORM BALAS -->
+
+                <div class="modal-section">
+
+                    <h4>Kirim Balasan</h4>
+
+                    <label
+                        class="form-label"
+                        for="replyInput"
+                    >
+                        Pesan Balasan
+                    </label>
+
+                    <textarea
+                        id="replyInput"
+                        class="form-control"
+                        placeholder="Tulis balasan untuk masyarakat..."
+                    ></textarea>
+
+                    <div class="modal-actions">
+
+                        <button
+                            type="button"
+                            class="btn btn-success"
+                            id="sendReplyButton"
+                        >
+                            Kirim Balasan
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        /* ==========================================
+           API
+        ========================================== */
+
+        const API_URL =
+            "https://script.google.com/macros/s/AKfycbybc2PsScGI9_h0x0Uo_bVPmv28vWG5u8JkfrA3qmPIwgs7QbIk3wqCrzb4yBafnilatQ/exec";
+
+
+        /* ==========================================
+           ELEMENT
+        ========================================== */
+
+        const message =
+            document.getElementById("message");
+
+        const tableBody =
+            document.getElementById("complaintTableBody");
+
+        const searchInput =
+            document.getElementById("searchInput");
+
+        const statusFilter =
+            document.getElementById("statusFilter");
+
+        const detailModal =
+            document.getElementById("detailModal");
+
+        const closeModal =
+            document.getElementById("closeModal");
+
+        const refreshButton =
+            document.getElementById("refreshButton");
+
+        const logoutButton =
+            document.getElementById("logoutButton");
+
+        const mobileMenu =
+            document.getElementById("mobileMenu");
+
+        const sidebar =
+            document.getElementById("sidebar");
+
+
+        /* ==========================================
+           SESSION
+        ========================================== */
+
+        const session =
+            sessionStorage.getItem("adminSession");
+
+        const adminDataRaw =
+            sessionStorage.getItem("adminData");
+
+
+        if(!session){
+
+            window.location.href="login-admin.html";
+
+        }
+
+
+        let adminData = {};
+
+        try{
+
+            adminData =
+                adminDataRaw
+                ? JSON.parse(adminDataRaw)
+                : {};
+
+        }catch(error){
+
+            adminData = {};
+
+        }
+
+
+        document.getElementById("adminName").textContent =
+            adminData.nama || "Admin Desa";
+
+
+        const adminName =
+            adminData.nama || "Admin";
+
+
+        document.getElementById("adminAvatar").textContent =
+            adminName.charAt(0).toUpperCase();
+
+
+        /* ==========================================
+           STATE
+        ========================================== */
+
+        let complaints = [];
+
+        let selectedComplaint = null;
+
+
+        /* ==========================================
+           MESSAGE
+        ========================================== */
+
+        function showMessage(text,type){
+
+            message.textContent = text;
+
+            message.className =
+                "message show " + type;
+
+            setTimeout(function(){
+
+                message.classList.remove("show");
+
+            },4500);
+
+        }
+
+
+        /* ==========================================
+           ESCAPE HTML
+        ========================================== */
+
+        function escapeHTML(value){
+
+            if(value === null || value === undefined){
+                return "";
+            }
+
+            return String(value)
+                .replace(/&/g,"&amp;")
+                .replace(/</g,"&lt;")
+                .replace(/>/g,"&gt;")
+                .replace(/"/g,"&quot;")
+                .replace(/'/g,"&#039;");
+        }
+
+
+        /* ==========================================
+           STATUS CLASS
+        ========================================== */
+
+        function statusClass(status){
+
+            const value =
+                String(status || "")
+                .toLowerCase()
+                .trim();
+
+            if(value === "diproses"){
+                return "diproses";
+            }
+
+            if(value === "selesai"){
+                return "selesai";
+            }
+
+            if(value === "ditolak"){
+                return "ditolak";
+            }
+
+            return "diterima";
+        }
+
+
+        /* ==========================================
+           LOAD COMPLAINTS
+        ========================================== */
+
+        async function loadComplaints(){
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="7">
+                        <div class="empty">
+                            <div class="empty-icon">⏳</div>
+                            <strong>Memuat data...</strong>
+                            <span>Mohon tunggu sebentar.</span>
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            try{
+
+                const url =
+                    API_URL +
+                    "?action=admincomplaints" +
+                    "&session=" +
+                    encodeURIComponent(session);
+
+                const response =
+                    await fetch(url);
+
+                const result =
+                    await response.json();
+
+
+                if(!result.success){
+
+                    if(
+                        result.message &&
+                        (
+                            result.message
+                            .toLowerCase()
+                            .includes("session")
+                            ||
+                            result.message
+                            .toLowerCase()
+                            .includes("login")
+                        )
+                    ){
+
+                        sessionStorage.removeItem(
+                            "adminSession"
+                        );
+
+                        sessionStorage.removeItem(
+                            "adminData"
+                        );
+
+                        window.location.href =
+                            "login-admin.html";
+
+                        return;
+
+                    }
+
+                    throw new Error(
+                        result.message ||
+                        "Data pengaduan gagal dimuat."
+                    );
+
+                }
+
+
+                complaints =
+                    Array.isArray(result.complaints)
+                    ? result.complaints
+                    : [];
+
+
+                updateStats();
+
+                renderComplaints();
+
+
+            }catch(error){
+
+                console.error(error);
+
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty">
+                                <div class="empty-icon">⚠</div>
+                                <strong>
+                                    Data pengaduan belum dapat dimuat.
+                                </strong>
+                                <span>
+                                    Periksa koneksi internet dan sesi admin.
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+                showMessage(
+                    "Data pengaduan gagal dimuat.",
+                    "error"
+                );
+
+            }
+
+        }
+
+
+        /* ==========================================
+           STATS
+        ========================================== */
+
+        function updateStats(){
+
+            let received = 0;
+            let processed = 0;
+            let finished = 0;
+
+            complaints.forEach(function(item){
+
+                const status =
+                    String(item.status || "")
+                    .toLowerCase()
+                    .trim();
+
+
+                if(status === "diterima"){
+                    received++;
+                }
+
+                if(status === "diproses"){
+                    processed++;
+                }
+
+                if(status === "selesai"){
+                    finished++;
+                }
+
+            });
+
+
+            document.getElementById(
+                "totalCount"
+            ).textContent = complaints.length;
+
+
+            document.getElementById(
+                "receivedCount"
+            ).textContent = received;
+
+
+            document.getElementById(
+                "processCount"
+            ).textContent = processed;
+
+
+            document.getElementById(
+                "doneCount"
+            ).textContent = finished;
+
+        }
+
+
+        /* ==========================================
+           FILTER DATA
+        ========================================== */
+
+        function getFilteredComplaints(){
+
+            const search =
+                searchInput.value
+                .toLowerCase()
+                .trim();
+
+            const selectedStatus =
+                statusFilter.value;
+
+
+            return complaints.filter(function(item){
+
+                const searchable = [
+                    item.id,
+                    item.token,
+                    item.nama,
+                    item.kontak,
+                    item.kategori,
+                    item.isi,
+                    item.tanggal,
+                    item.status
+                ]
+                .join(" ")
+                .toLowerCase();
+
+
+                const matchesSearch =
+                    !search ||
+                    searchable.includes(search);
+
+
+                const matchesStatus =
+                    !selectedStatus ||
+                    String(item.status || "")
+                    .toLowerCase() ===
+                    selectedStatus.toLowerCase();
+
+
+                return matchesSearch &&
+                       matchesStatus;
+
+            });
+
+        }
+
+
+        /* ==========================================
+           RENDER
+        ========================================== */
+
+        function renderComplaints(){
+
+            const filtered =
+                getFilteredComplaints();
+
+
+            if(filtered.length === 0){
+
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty">
+                                <div class="empty-icon">📭</div>
+                                <strong>
+                                    Tidak ada pengaduan
+                                </strong>
+                                <span>
+                                    Belum ada data yang sesuai dengan pencarian.
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+                return;
+
+            }
+
+
+            tableBody.innerHTML =
+                filtered.map(function(item,index){
+
+                    const status =
+                        item.status || "Diterima";
+
+
+                    return `
+                        <tr>
+
+                            <td>
+                                <div class="complaint-id">
+                                    ${escapeHTML(item.id || "-")}
+                                </div>
+
+                                <div class="complaint-contact">
+                                    ${escapeHTML(item.token || "-")}
+                                </div>
+                            </td>
+
+
+                            <td>
+                                <div class="complaint-name">
+                                    ${escapeHTML(item.nama || "-")}
+                                </div>
+
+                                <div class="complaint-contact">
+                                    ${escapeHTML(item.kontak || "-")}
+                                </div>
+                            </td>
+
+
+                            <td>
+                                ${escapeHTML(item.kategori || "-")}
+                            </td>
+
+
+                            <td>
+                                <div class="complaint-text">
+                                    ${escapeHTML(item.isi || "-")}
+                                </div>
+                            </td>
+
+
+                            <td>
+                                ${escapeHTML(item.tanggal || "-")}
+                            </td>
+
+
+                            <td>
+                                <span class="badge ${statusClass(status)}">
+                                    ${escapeHTML(status)}
+                                </span>
+                            </td>
+
+
+                            <td>
+
+                                <button
+                                    type="button"
+                                    class="action-button"
+                                    data-index="${complaints.indexOf(item)}"
+                                >
+                                    Detail
+                                </button>
+
+                            </td>
+
+                        </tr>
+                    `;
+
+                })
+                .join("");
+
+
+            document
+                .querySelectorAll(".action-button")
+                .forEach(function(button){
+
+                    button.addEventListener(
+                        "click",
+                        function(){
+
+                            const index =
+                                Number(
+                                    button.dataset.index
+                                );
+
+                            openComplaint(
+                                complaints[index]
+                            );
+
+                        }
+                    );
+
+                });
+
+        }
+
+
+        /* ==========================================
+           OPEN DETAIL
+        ========================================== */
+
+        async function openComplaint(item){
+
+            if(!item){
+                return;
+            }
+
+
+            selectedComplaint = item;
+
+
+            document.getElementById(
+                "modalToken"
+            ).textContent =
+                item.token || item.id || "-";
+
+
+            document.getElementById(
+                "detailNama"
+            ).textContent =
+                item.nama || "-";
+
+
+            document.getElementById(
+                "detailKontak"
+            ).textContent =
+                item.kontak || "-";
+
+
+            document.getElementById(
+                "detailKategori"
+            ).textContent =
+                item.kategori || "-";
+
+
+            document.getElementById(
+                "detailTanggal"
+            ).textContent =
+                item.tanggal || "-";
+
+
+            document.getElementById(
+                "detailId"
+            ).textContent =
+                item.id || "-";
+
+
+            document.getElementById(
+                "detailStatus"
+            ).textContent =
+                item.status || "-";
+
+
+            document.getElementById(
+                "detailIsi"
+            ).textContent =
+                item.isi || "-";
+
+
+            document.getElementById(
+                "statusSelect"
+            ).value =
+                item.status || "Diterima";
+
+
+            document.getElementById(
+                "replyInput"
+            ).value = "";
+
+
+            detailModal.classList.add("show");
+
+
+            await loadReplies(item);
+
+        }
+
+
+        /* ==========================================
+           LOAD DETAIL / REPLIES
+        ========================================== */
+
+        async function loadReplies(item){
+
+            const replyList =
+                document.getElementById("replyList");
+
+
+            replyList.innerHTML = `
+                <div class="no-reply">
+                    Memuat balasan...
+                </div>
+            `;
+
+
+            try{
+
+                const token =
+                    item.token || "";
+
+
+                const url =
+                    API_URL +
+                    "?action=admincomplaint" +
+                    "&session=" +
+                    encodeURIComponent(session) +
+                    "&token=" +
+                    encodeURIComponent(token);
+
+
+                const response =
+                    await fetch(url);
+
+
+                const result =
+                    await response.json();
+
+
+                if(
+                    result.success &&
+                    result.complaint
+                ){
+
+                    const complaint =
+                        result.complaint;
+
+
+                    selectedComplaint =
+                        complaint;
+
+
+                    document.getElementById(
+                        "detailNama"
+                    ).textContent =
+                        complaint.nama || "-";
+
+
+                    document.getElementById(
+                        "detailKontak"
+                    ).textContent =
+                        complaint.kontak || "-";
+
+
+                    document.getElementById(
+                        "detailKategori"
+                    ).textContent =
+                        complaint.kategori || "-";
+
+
+                    document.getElementById(
+                        "detailTanggal"
+                    ).textContent =
+                        complaint.tanggal || "-";
+
+
+                    document.getElementById(
+                        "detailId"
+                    ).textContent =
+                        complaint.id || "-";
+
+
+                    document.getElementById(
+                        "detailStatus"
+                    ).textContent =
+                        complaint.status || "-";
+
+
+                    document.getElementById(
+                        "detailIsi"
+                    ).textContent =
+                        complaint.isi || "-";
+
+
+                    document.getElementById(
+                        "statusSelect"
+                    ).value =
+                        complaint.status ||
+                        "Diterima";
+
+
+                    renderReplies(
+                        result.replies || []
+                    );
+
+                    return;
+
+                }
+
+
+                renderReplies(
+                    result.replies || []
+                );
+
+
+            }catch(error){
+
+                console.error(error);
+
+                renderReplies([]);
+
+            }
+
+        }
+
+
+        /* ==========================================
+           RENDER REPLIES
+        ========================================== */
+
+        function renderReplies(replies){
+
+            const replyList =
+                document.getElementById("replyList");
+
+
+            if(
+                !Array.isArray(replies) ||
+                replies.length === 0
+            ){
+
+                replyList.innerHTML = `
+                    <div class="no-reply">
+                        Belum ada balasan.
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            replyList.innerHTML =
+                replies.map(function(reply){
+
+                    return `
+                        <div class="reply">
+
+                            <div class="reply-head">
+
+                                <span class="reply-sender">
+                                    ${escapeHTML(
+                                        reply.pengirim ||
+                                        "Admin"
+                                    )}
+                                </span>
+
+                                <span class="reply-time">
+                                    ${escapeHTML(
+                                        reply.waktu || ""
+                                    )}
+                                </span>
+
+                            </div>
+
+                            <div class="reply-text">
+                                ${escapeHTML(
+                                    reply.pesan || ""
+                                )}
+                            </div>
+
+                        </div>
+                    `;
+
+                })
+                .join("");
+
+        }
+
+
+        /* ==========================================
+           UPDATE STATUS
+        ========================================== */
+
+        document
+            .getElementById("updateStatusButton")
+            .addEventListener(
+                "click",
+                async function(){
+
+                    if(!selectedComplaint){
+                        return;
+                    }
+
+
+                    const newStatus =
+                        document.getElementById(
+                            "statusSelect"
+                        ).value;
+
+
+                    const button = this;
+
+                    button.disabled = true;
+
+                    button.textContent =
+                        "Menyimpan...";
+
+
+                    try{
+
+                        const response =
+                            await fetch(API_URL,{
+                                method:"POST",
+                                headers:{
+                                    "Content-Type":
+                                        "text/plain;charset=utf-8"
+                                },
+                                body:JSON.stringify({
+
+                                    action:
+                                        "adminupdatestatus",
+
+                                    session:
+                                        session,
+
+                                    token:
+                                        selectedComplaint.token,
+
+                                    status:
+                                        newStatus
+
+                                })
+                            });
+
+
+                        const result =
+                            await response.json();
+
+
+                        if(!result.success){
+
+                            throw new Error(
+                                result.message ||
+                                "Status gagal diperbarui."
+                            );
+
+                        }
+
+
+                        selectedComplaint.status =
+                            newStatus;
+
+
+                        showMessage(
+                            "Status pengaduan berhasil diperbarui.",
+                            "success"
+                        );
+
+
+                        await loadComplaints();
+
+
+                        document.getElementById(
+                            "detailStatus"
+                        ).textContent =
+                            newStatus;
+
+
+                    }catch(error){
+
+                        console.error(error);
+
+                        showMessage(
+                            error.message ||
+                            "Status gagal diperbarui.",
+                            "error"
+                        );
+
+                    }
+
+
+                    button.disabled = false;
+
+                    button.textContent =
+                        "Simpan Status";
+
+                }
+            );
+
+
+        /* ==========================================
+           SEND REPLY
+        ========================================== */
+
+        document
+            .getElementById("sendReplyButton")
+            .addEventListener(
+                "click",
+                async function(){
+
+                    if(!selectedComplaint){
+                        return;
+                    }
+
+
+                    const replyInput =
+                        document.getElementById(
+                            "replyInput"
+                        );
+
+
+                    const reply =
+                        replyInput.value.trim();
+
+
+                    if(!reply){
+
+                        showMessage(
+                            "Pesan balasan belum diisi.",
+                            "error"
+                        );
+
+                        return;
+
+                    }
+
+
+                    const button = this;
+
+                    button.disabled = true;
+
+                    button.textContent =
+                        "Mengirim...";
+
+
+                    try{
+
+                        const response =
+                            await fetch(API_URL,{
+                                method:"POST",
+                                headers:{
+                                    "Content-Type":
+                                        "text/plain;charset=utf-8"
+                                },
+                                body:JSON.stringify({
+
+                                    action:
+                                        "adminreply",
+
+                                    session:
+                                        session,
+
+                                    token:
+                                        selectedComplaint.token,
+
+                                    pengirim:
+                                        adminData.nama ||
+                                        "Admin Desa",
+
+                                    pesan:
+                                        reply
+
+                                })
+                            });
+
+
+                        const result =
+                            await response.json();
+
+
+                        if(!result.success){
+
+                            throw new Error(
+                                result.message ||
+                                "Balasan gagal dikirim."
+                            );
+
+                        }
+
+
+                        replyInput.value = "";
+
+
+                        showMessage(
+                            "Balasan berhasil dikirim.",
+                            "success"
+                        );
+
+
+                        await loadReplies(
+                            selectedComplaint
+                        );
+
+
+                    }catch(error){
+
+                        console.error(error);
+
+                        showMessage(
+                            error.message ||
+                            "Balasan gagal dikirim.",
+                            "error"
+                        );
+
+                    }
+
+
+                    button.disabled = false;
+
+                    button.textContent =
+                        "Kirim Balasan";
+
+                }
+            );
+
+
+        /* ==========================================
+           SEARCH / FILTER
+        ========================================== */
+
+        searchInput.addEventListener(
+            "input",
+            renderComplaints
+        );
+
+
+        statusFilter.addEventListener(
+            "change",
+            renderComplaints
+        );
+
+
+        /* ==========================================
+           REFRESH
+        ========================================== */
+
+        refreshButton.addEventListener(
+            "click",
+            async function(){
+
+                refreshButton.disabled = true;
+
+                refreshButton.textContent =
+                    "↻ Memuat...";
+
+
+                await loadComplaints();
+
+
+                refreshButton.disabled = false;
+
+                refreshButton.textContent =
+                    "↻ Refresh Data";
+
+            }
+        );
+
+
+        /* ==========================================
+           CLOSE MODAL
+        ========================================== */
+
+        closeModal.addEventListener(
+            "click",
+            function(){
+
+                detailModal.classList.remove("show");
+
+            }
+        );
+
+
+        detailModal.addEventListener(
+            "click",
+            function(event){
+
+                if(event.target === detailModal){
+
+                    detailModal.classList.remove(
+                        "show"
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* ==========================================
+           MOBILE MENU
+        ========================================== */
+
+        mobileMenu.addEventListener(
+            "click",
+            function(){
+
+                sidebar.classList.toggle("open");
+
+            }
+        );
+
+
+        document
+            .querySelectorAll(".menu-link")
+            .forEach(function(link){
+
+                link.addEventListener(
+                    "click",
+                    function(){
+
+                        sidebar.classList.remove(
+                            "open"
+                        );
+
+                    }
+                );
+
+            });
+
+
+        /* ==========================================
+           LOGOUT
+        ========================================== */
+
+        logoutButton.addEventListener(
+            "click",
+            async function(){
+
+                logoutButton.disabled = true;
+
+                logoutButton.textContent =
+                    "Keluar...";
+
+
+                try{
+
+                    await fetch(API_URL,{
+                        method:"POST",
+                        headers:{
+                            "Content-Type":
+                                "text/plain;charset=utf-8"
+                        },
+                        body:JSON.stringify({
+
+                            action:
+                                "adminlogout",
+
+                            session:
+                                session
+
+                        })
+                    });
+
+                }catch(error){
+
+                    console.error(error);
+
+                }
+
+
+                sessionStorage.removeItem(
+                    "adminSession"
+                );
+
+                sessionStorage.removeItem(
+                    "adminData"
+                );
+
+
+                window.location.href =
+                    "login-admin.html";
+
+            }
+        );
+
+
+        /* ==========================================
+           ESC MODAL
+        ========================================== */
+
+        document.addEventListener(
+            "keydown",
+            function(event){
+
+                if(
+                    event.key === "Escape" &&
+                    detailModal.classList.contains("show")
+                ){
+
+                    detailModal.classList.remove(
+                        "show"
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* ==========================================
+           START
+        ========================================== */
+
+        loadComplaints();
+
+    </script>
+
+</body>
+</html>
