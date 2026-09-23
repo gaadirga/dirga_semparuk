@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Peta & Kontak — Desa Semparuk</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <style>
+
+        /* =========================================
+           PENGADUAN
+        ========================================= */
+
+        .complaint-card {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 32px;
+            border-radius: 26px;
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(93, 165, 232, 0.18);
+            box-shadow:
+                0 20px 55px rgba(37, 107, 184, 0.12);
+        }
+
+        .complaint-card h3 {
+            margin-bottom: 8px;
+            color: #1f5f9f;
+            font-size: 24px;
+        }
+
+        .complaint-card > p {
+            margin-bottom: 25px;
+            color: #64748b;
+            line-height: 1.7;
+        }
+
+        .complaint-form {
+            display: grid;
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #24415f;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #d5eafd;
+            border-radius: 14px;
+            background: #fafdff;
+            color: #243b53;
+            font-family: inherit;
+            font-size: 15px;
+            outline: none;
+            transition: 0.25s ease;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            border-color: #5da5e8;
+            box-shadow:
+                0 0 0 4px rgba(93, 165, 232, 0.12);
+            background: #fff;
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .complaint-submit {
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        .complaint-submit:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+
+        /* =========================================
+           PREMIUM TOKEN RESULT
+        ========================================= */
+
+        .complaint-result {
+            display: none;
+            margin-top: 28px;
+            padding: 26px;
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(239, 248, 255, 0.98),
+                    rgba(255, 255, 255, 0.98)
+                );
+
+            border: 1px solid rgba(93, 165, 232, 0.25);
+
+            box-shadow:
+                0 18px 45px rgba(37, 107, 184, 0.10);
+
+            position: relative;
+            overflow: hidden;
+        }
+
+        .complaint-result::before {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(93, 165, 232, 0.08);
+            top: -90px;
+            right: -70px;
+        }
+
+        .complaint-result.show {
+            display: block;
+            animation: tokenReveal 0.45s ease;
+        }
+
+        @keyframes tokenReveal {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-icon {
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #5da5e8,
+                    #256bb8
+                );
+
+            color: #fff;
+            font-size: 22px;
+
+            box-shadow:
+                0 10px 25px rgba(37, 107, 184, 0.22);
+
+            margin-bottom: 15px;
+        }
+
+        .result-title {
+            position: relative;
+            z-index: 1;
+
+            font-size: 20px;
+            font-weight: 800;
+            color: #1f5f9f;
+            margin-bottom: 7px;
+        }
+
+        .result-description {
+            position: relative;
+            z-index: 1;
+
+            margin-bottom: 20px;
+            color: #64748b;
+            line-height: 1.65;
+            font-size: 14px;
+        }
+
+
+        /* TOKEN BOX */
+
+        .token-wrapper {
+            position: relative;
+            z-index: 1;
+
+            padding: 5px;
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #d9efff,
+                    #ffffff
+                );
+
+            border: 1px solid rgba(93, 165, 232, 0.28);
+
+            margin-bottom: 14px;
+        }
+
+        .token-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+
+            padding: 17px 18px;
+
+            border-radius: 14px;
+
+            background: #ffffff;
+
+            box-shadow:
+                inset 0 0 0 1px rgba(93, 165, 232, 0.08);
+        }
+
+        .token-info {
+            min-width: 0;
+        }
+
+        .token-label {
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: #7890a5;
+
+            font-size: 10px;
+            font-weight: 700;
+
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .token-value {
+            display: block;
+
+            color: #256bb8;
+
+            font-family:
+                "IBM Plex Mono",
+                monospace;
+
+            font-size: 20px;
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+            word-break: break-all;
+        }
+
+
+        /* COPY BUTTON */
+
+        .copy-token-btn {
+            flex-shrink: 0;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+
+            min-width: 125px;
+
+            padding: 11px 15px;
+
+            border: 1px solid rgba(37, 107, 184, 0.15);
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f2f9ff,
+                    #e5f3ff
+                );
+
+            color: #256bb8;
+
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+        }
+
+        .copy-token-btn:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 20px rgba(37, 107, 184, 0.14);
+        }
+
+        .copy-token-btn:active {
+            transform: translateY(0);
+        }
+
+        .copy-token-btn.copied {
+            background:
+                linear-gradient(
+                    135deg,
+                    #e8f7ef,
+                    #d9f2e4
+                );
+
+            border-color: #b9e4c9;
+            color: #27834c;
+        }
+
+        .copy-icon {
+            font-size: 15px;
+        }
+
+
+        /* TOKEN NOTE */
+
+        .result-note {
+            position: relative;
+            z-index: 1;
+
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+
+            color: #718096;
+
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .result-note-icon {
+            flex-shrink: 0;
+            font-size: 14px;
+        }
+
+
+        /* =========================================
+           CHECK STATUS
+        ========================================= */
+
+        .check-card {
+            max-width: 850px;
+            margin: 35px auto 0;
+            padding: 32px;
+            border-radius: 24px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f4f9ff,
+                    #ffffff
+                );
+
+            border: 1px solid #d5eafd;
+
+            box-shadow:
+                0 18px 45px rgba(37, 107, 184, 0.08);
+        }
+
+        .check-card h3 {
+            color: #1f5f9f;
+            margin-bottom: 8px;
+            font-size: 24px;
+        }
+
+        .check-card > p {
+            color: #64748b;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .check-form {
+            display: flex;
+            gap: 12px;
+        }
+
+        .check-form .form-control {
+            flex: 1;
+        }
+
+        .check-form button {
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .status-result {
+            display: none;
+            margin-top: 25px;
+        }
+
+        .status-result.show {
+            display: block;
+        }
+
+        .status-card {
+            padding: 24px;
+            border-radius: 18px;
+            background: #fff;
+            border: 1px solid #dbeeff;
+            box-shadow:
+                0 12px 35px rgba(37, 107, 184, 0.08);
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .status-token {
+            font-family:
+                "IBM Plex Mono",
+                monospace;
+
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            padding: 7px 13px;
+            border-radius: 999px;
+
+            background: #eaf5ff;
+            color: #256bb8;
+
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .complaint-detail {
+            padding: 18px;
+            border-radius: 14px;
+            background: #f8fcff;
+            margin-bottom: 20px;
+        }
+
+        .detail-row {
+            margin-bottom: 12px;
+        }
+
+        .detail-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-label {
+            display: block;
+            font-size: 12px;
+            color: #7890a5;
+            margin-bottom: 4px;
+        }
+
+        .detail-value {
+            color: #29445e;
+            line-height: 1.6;
+        }
+
+        .reply-title {
+            color: #256bb8;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .reply-item {
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 14px;
+            background: #f4f9ff;
+            border-left: 4px solid #5da5e8;
+        }
+
+        .reply-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .reply-sender {
+            font-weight: 700;
+            color: #256bb8;
+            margin-bottom: 5px;
+        }
+
+        .reply-message {
+            color: #425b73;
+            line-height: 1.6;
+        }
+
+        .reply-time {
+            margin-top: 8px;
+            color: #8aa0b4;
+            font-size: 12px;
+        }
+
+        .empty-reply {
+            color: #718096;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        .api-error {
+            padding: 15px;
+            border-radius: 12px;
+
+            background: #fff5f5;
+            color: #c53030;
+
+            border: 1px solid #fed7d7;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 700px) {
+
+            .complaint-card,
+            .check-card {
+                padding: 22px;
+                border-radius: 20px;
+            }
+
+            .token-inner {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+
+            .token-value {
+                font-size: 18px;
+            }
+
+            .copy-token-btn {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .check-form {
+                flex-direction: column;
+            }
+
+            .check-form button {
+                width: 100%;
+            }
+
+            .result-title {
+                font-size: 18px;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <header class="site-header">
+
+        <div class="container navbar">
+
+            <a href="index.html" class="brand">
+
+                <div class="brand-logo">
+                    DS
+                </div>
+
+                <div class="brand-text">
+
+                    <span class="brand-name">
+                        Desa Semparuk
+                    </span>
+
+                    <span class="brand-subtitle">
+                        Pemerintah Desa
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <button
+                class="menu-toggle"
+                type="button"
+                aria-label="Buka menu">
+
+                ☰
+
+            </button>
+
+
+            <nav>
+
+                <ul class="nav-menu">
+
+                    <li>
+                        <a href="index.html">
+                            Beranda
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="profil.html">
+                            Profil Desa
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="berita.html">
+                            Berita & Kegiatan
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="galeri.html">
+                            Galeri
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="kontak.html" class="active">
+                            Peta & Kontak
+                        </a>
+                    </li>
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================================
+         HERO
+    ========================================== -->
+
+    <section class="page-hero">
+
+        <div class="page-hero-content container">
+
+            <span class="hero-label">
+                PETA & KONTAK
+            </span>
+
+            <h1>
+                Hubungi Pemerintah Desa
+            </h1>
+
+            <p>
+                Temukan lokasi Kantor Desa Semparuk dan sampaikan
+                pengaduan atau aspirasi masyarakat secara langsung.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         LOKASI
+    ========================================== -->
+
+    <section class="section section-light">
+
+        <div class="container">
+
+            <div class="section-header">
+
+                <span class="section-label">
+                    LOKASI
+                </span>
+
+                <h2 class="section-title">
+                    Kantor Desa Semparuk
+                </h2>
+
+                <p class="section-description">
+                    Kunjungi Kantor Desa Semparuk untuk mendapatkan
+                    informasi dan pelayanan administrasi desa.
+                </p>
+
+            </div>
+
+
+            <div class="contact-grid">
+
+
+                <div class="contact-item">
+
+                    <div class="contact-icon">
+                        📍
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Alamat
+                        </h3>
+
+                        <p>
+                            53RR+33H, Semparuk, Kecamatan Semparuk,
+                            Kabupaten Sambas, Kalimantan Barat 79461
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="contact-item">
+
+                    <div class="contact-icon">
+                        🕐
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Jam Pelayanan
+                        </h3>
+
+                        <p>
+                            Senin – Jumat<br>
+                            08.00 – 15.00 WIB
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="contact-item">
+
+                    <div class="contact-icon">
+                        ☎
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Kontak
+                        </h3>
+
+                        <p>
+                            Informasi kontak dapat diperoleh
+                            langsung melalui Kantor Desa Semparuk.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="map-container">
+
+                <iframe
+                    src="https://www.google.com/maps?q=Kantor%20Desa%20Semparuk,%20Semparuk,%20Kecamatan%20Semparuk,%20Kabupaten%20Sambas,%20Kalimantan%20Barat&output=embed"
+                    width="100%"
+                    height="430"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         PENGADUAN
+    ========================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+
+            <div class="section-header">
+
+                <span class="section-label">
+                    LAYANAN MASYARAKAT
+                </span>
+
+                <h2 class="section-title">
+                    Pengaduan Masyarakat
+                </h2>
+
+                <p class="section-description">
+                    Sampaikan pengaduan kepada Pemerintah Desa Semparuk
+                    dan pantau perkembangan laporan menggunakan token.
+                </p>
+
+            </div>
+
+
+
+            <!-- FORM -->
+
+            <div class="complaint-card">
+
+                <h3>
+                    Kirim Pengaduan
+                </h3>
+
+                <p>
+                    Isi formulir berikut dengan informasi yang sesuai.
+                    Setelah dikirim, kamu akan mendapatkan token untuk
+                    memantau status pengaduan.
+                </p>
+
+
+                <form
+                    id="complaintForm"
+                    class="complaint-form">
+
+
+                    <div class="form-group">
+
+                        <label for="nama">
+                            Nama
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nama"
+                            name="nama"
+                            class="form-control"
+                            placeholder="Masukkan nama"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="kontak">
+                            Nomor Kontak
+                        </label>
+
+                        <input
+                            type="text"
+                            id="kontak"
+                            name="kontak"
+                            class="form-control"
+                            placeholder="Contoh: 081234567890"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="kategori">
+                            Kategori Pengaduan
+                        </label>
+
+                        <select
+                            id="kategori"
+                            name="kategori"
+                            class="form-control"
+                            required>
+
+                            <option value="">
+                                Pilih kategori
+                            </option>
+
+                            <option value="Infrastruktur">
+                                Infrastruktur
+                            </option>
+
+                            <option value="Pelayanan">
+                                Pelayanan
+                            </option>
+
+                            <option value="Administrasi">
+                                Administrasi
+                            </option>
+
+                            <option value="Lingkungan">
+                                Lingkungan
+                            </option>
+
+                            <option value="Sosial">
+                                Sosial
+                            </option>
+
+                            <option value="Lainnya">
+                                Lainnya
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="isi">
+                            Isi Pengaduan
+                        </label>
+
+                        <textarea
+                            id="isi"
+                            name="isi"
+                            class="form-control"
+                            placeholder="Tuliskan pengaduan kamu..."
+                            required></textarea>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        id="submitComplaint"
+                        class="btn-primary complaint-submit">
+
+                        Kirim Pengaduan
+
+                    </button>
+
+
+                </form>
+
+
+
+                <!-- =================================
+                     PREMIUM TOKEN
+                ================================== -->
+
+                <div
+                    id="complaintResult"
+                    class="complaint-result">
+
+
+                    <div class="success-icon">
+                        ✓
+                    </div>
+
+
+                    <div class="result-title">
+                        Pengaduan berhasil dikirim
+                    </div>
+
+
+                    <div class="result-description">
+                        Simpan token berikut untuk mengecek
+                        perkembangan dan balasan pengaduan kamu.
+                    </div>
+
+
+                    <div class="token-wrapper">
+
+                        <div class="token-inner">
+
+
+                            <div class="token-info">
+
+                                <span class="token-label">
+                                    Token Pengaduan
+                                </span>
+
+                                <span
+                                    id="generatedToken"
+                                    class="token-value">
+                                </span>
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                id="copyTokenButton"
+                                class="copy-token-btn">
+
+                                <span
+                                    id="copyTokenIcon"
+                                    class="copy-icon">
+                                    📋
+                                </span>
+
+                                <span
+                                    id="copyTokenText">
+                                    Salin Token
+                                </span>
+
+                            </button>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="result-note">
+
+                        <span class="result-note-icon">
+                            🔐
+                        </span>
+
+                        <span>
+                            Simpan token ini dengan baik.
+                            Token digunakan untuk mengecek status
+                            dan balasan pengaduan.
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================
+                 CEK STATUS
+            ================================== -->
+
+            <div class="check-card">
+
+
+                <h3>
+                    Cek Status Pengaduan
+                </h3>
+
+
+                <p>
+                    Masukkan token pengaduan yang kamu dapatkan
+                    setelah mengirim laporan.
+                </p>
+
+
+                <form
+                    id="checkComplaintForm"
+                    class="check-form">
+
+
+                    <input
+                        type="text"
+                        id="checkToken"
+                        class="form-control"
+                        placeholder="Contoh: SPK-69F3ZXB3"
+                        required>
+
+
+                    <button
+                        type="submit"
+                        id="checkButton"
+                        class="btn-primary">
+
+                        Cek Status
+
+                    </button>
+
+
+                </form>
+
+
+                <div
+                    id="statusResult"
+                    class="status-result">
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
+
+    <footer class="site-footer">
+
+        <div class="container">
+
+            <div class="footer-content">
+
+                <div>
+
+                    <h3>
+                        Desa Semparuk
+                    </h3>
+
+                    <p>
+                        Website informasi dan pelayanan
+                        Pemerintah Desa Semparuk.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="footer-bottom">
+
+                <p>
+                    © <span class="current-year"></span>
+                    Pemerintah Desa Semparuk.
+                    Semua hak dilindungi.
+                </p>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+
+    <script src="assets/js/script.js"></script>
+
+
+    <script>
+
+        /* =========================================
+           API
+        ========================================= */
+
+        const API_URL =
+            "https://script.google.com/macros/s/AKfycbybc2PsScGI9_h0x0Uo_bVPmv28vWG5u8JkfrA3qmPIwgs7QbIk3wqCrzb4yBafnilatQ/exec";
+
+
+        /* =========================================
+           ELEMENT
+        ========================================= */
+
+        const complaintForm =
+            document.getElementById("complaintForm");
+
+        const submitButton =
+            document.getElementById("submitComplaint");
+
+        const complaintResult =
+            document.getElementById("complaintResult");
+
+        const generatedToken =
+            document.getElementById("generatedToken");
+
+        const copyTokenButton =
+            document.getElementById("copyTokenButton");
+
+        const copyTokenText =
+            document.getElementById("copyTokenText");
+
+        const copyTokenIcon =
+            document.getElementById("copyTokenIcon");
+
+
+        /* =========================================
+           KIRIM PENGADUAN
+        ========================================= */
+
+        complaintForm.addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                submitButton.disabled = true;
+
+                submitButton.textContent =
+                    "Mengirim...";
+
+
+                const data =
+                    new URLSearchParams();
+
+
+                data.append(
+                    "action",
+                    "submitcomplaint"
+                );
+
+                data.append(
+                    "nama",
+                    document
+                        .getElementById("nama")
+                        .value
+                        .trim()
+                );
+
+                data.append(
+                    "kontak",
+                    document
+                        .getElementById("kontak")
+                        .value
+                        .trim()
+                );
+
+                data.append(
+                    "kategori",
+                    document
+                        .getElementById("kategori")
+                        .value
+                );
+
+                data.append(
+                    "isi",
+                    document
+                        .getElementById("isi")
+                        .value
+                        .trim()
+                );
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            API_URL,
+                            {
+                                method: "POST",
+                                body: data
+                            }
+                        );
+
+
+                    const result =
+                        await response.json();
+
+
+                    if (result.success) {
+
+                        generatedToken.textContent =
+                            result.token;
+
+
+                        complaintResult.classList.add(
+                            "show"
+                        );
+
+
+                        complaintForm.reset();
+
+
+                        /* RESET COPY BUTTON */
+
+                        copyTokenButton.classList.remove(
+                            "copied"
+                        );
+
+                        copyTokenIcon.textContent =
+                            "📋";
+
+                        copyTokenText.textContent =
+                            "Salin Token";
+
+
+                        complaintResult.scrollIntoView({
+                            behavior: "smooth",
+                            block: "center"
+                        });
+
+
+                    } else {
+
+                        alert(
+                            result.message ||
+                            "Pengaduan gagal dikirim."
+                        );
+
+                    }
+
+
+                } catch(error) {
+
+                    console.error(error);
+
+                    alert(
+                        "Terjadi kesalahan saat menghubungi server."
+                    );
+
+                }
+
+
+                submitButton.disabled = false;
+
+                submitButton.textContent =
+                    "Kirim Pengaduan";
+
+            }
+        );
+
+
+
+        /* =========================================
+           SALIN TOKEN
+        ========================================= */
+
+        copyTokenButton.addEventListener(
+            "click",
+            async function() {
+
+                const token =
+                    generatedToken.textContent.trim();
+
+
+                if (!token) {
+                    return;
+                }
+
+
+                try {
+
+                    /* MODERN CLIPBOARD */
+
+                    await navigator.clipboard.writeText(
+                        token
+                    );
+
+
+                    showCopied();
+
+
+                } catch(error) {
+
+                    /* FALLBACK UNTUK BROWSER TERTENTU */
+
+                    const temporaryInput =
+                        document.createElement("textarea");
+
+
+                    temporaryInput.value =
+                        token;
+
+
+                    temporaryInput.style.position =
+                        "fixed";
+
+                    temporaryInput.style.opacity =
+                        "0";
+
+
+                    document.body.appendChild(
+                        temporaryInput
+                    );
+
+
+                    temporaryInput.focus();
+
+                    temporaryInput.select();
+
+
+                    try {
+
+                        document.execCommand(
+                            "copy"
+                        );
+
+                        showCopied();
+
+                    } catch(copyError) {
+
+                        alert(
+                            "Token belum berhasil disalin. Silakan salin secara manual."
+                        );
+
+                    }
+
+
+                    document.body.removeChild(
+                        temporaryInput
+                    );
+
+                }
+
+            }
+        );
+
+
+
+        /* =========================================
+           STATUS COPY
+        ========================================= */
+
+        function showCopied() {
+
+            copyTokenButton.classList.add(
+                "copied"
+            );
+
+            copyTokenIcon.textContent =
+                "✓";
+
+            copyTokenText.textContent =
+                "Tersalin!";
+
+
+            setTimeout(
+                function() {
+
+                    copyTokenButton.classList.remove(
+                        "copied"
+                    );
+
+                    copyTokenIcon.textContent =
+                        "📋";
+
+                    copyTokenText.textContent =
+                        "Salin Token";
+
+                },
+                2200
+            );
+
+        }
+
+
+
+        /* =========================================
+           CEK PENGADUAN
+        ========================================= */
+
+        const checkForm =
+            document.getElementById(
+                "checkComplaintForm"
+            );
+
+        const checkButton =
+            document.getElementById(
+                "checkButton"
+            );
+
+        const statusResult =
+            document.getElementById(
+                "statusResult"
+            );
+
+
+        checkForm.addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                const token =
+                    document
+                        .getElementById("checkToken")
+                        .value
+                        .trim()
+                        .toUpperCase();
+
+
+                if (!token) {
+                    return;
+                }
+
+
+                checkButton.disabled = true;
+
+                checkButton.textContent =
+                    "Mengecek...";
+
+
+                statusResult.classList.add(
+                    "show"
+                );
+
+
+                statusResult.innerHTML = `
+                    <div class="empty-reply">
+                        Sedang mengambil data pengaduan...
+                    </div>
+                `;
+
+
+                try {
+
+                    const url =
+                        API_URL +
+                        "?action=checkcomplaint&token=" +
+                        encodeURIComponent(token);
+
+
+                    const response =
+                        await fetch(url);
+
+
+                    const result =
+                        await response.json();
+
+
+                    if (!result.success) {
+
+                        statusResult.innerHTML = `
+                            <div class="api-error">
+                                ${escapeHtml(
+                                    result.message ||
+                                    "Pengaduan tidak ditemukan."
+                                )}
+                            </div>
+                        `;
+
+                        return;
+                    }
+
+
+                    const complaint =
+                        result.complaint;
+
+
+                    const replies =
+                        result.replies || [];
+
+
+                    let repliesHTML = "";
+
+
+                    if (replies.length === 0) {
+
+                        repliesHTML = `
+                            <div class="empty-reply">
+                                Belum ada balasan dari Pemerintah Desa.
+                            </div>
+                        `;
+
+                    } else {
+
+                        repliesHTML =
+                            replies
+                                .map(function(reply) {
+
+                                    return `
+                                        <div class="reply-item">
+
+                                            <div class="reply-sender">
+                                                ${escapeHtml(
+                                                    reply.pengirim ||
+                                                    "Pemerintah Desa"
+                                                )}
+                                            </div>
+
+                                            <div class="reply-message">
+                                                ${escapeHtml(
+                                                    reply.pesan ||
+                                                    ""
+                                                )}
+                                            </div>
+
+                                            <div class="reply-time">
+                                                ${escapeHtml(
+                                                    reply.waktu ||
+                                                    ""
+                                                )}
+                                            </div>
+
+                                        </div>
+                                    `;
+
+                                })
+                                .join("");
+
+                    }
+
+
+                    statusResult.innerHTML = `
+
+                        <div class="status-card">
+
+                            <div class="status-header">
+
+                                <div class="status-token">
+                                    ${escapeHtml(
+                                        complaint.token
+                                    )}
+                                </div>
+
+                                <div class="status-badge">
+                                    ${escapeHtml(
+                                        complaint.status
+                                    )}
+                                </div>
+
+                            </div>
+
+
+                            <div class="complaint-detail">
+
+                                <div class="detail-row">
+
+                                    <span class="detail-label">
+                                        Nama
+                                    </span>
+
+                                    <div class="detail-value">
+                                        ${escapeHtml(
+                                            complaint.nama
+                                        )}
+                                    </div>
+
+                                </div>
+
+
+                                <div class="detail-row">
+
+                                    <span class="detail-label">
+                                        Kategori
+                                    </span>
+
+                                    <div class="detail-value">
+                                        ${escapeHtml(
+                                            complaint.kategori
+                                        )}
+                                    </div>
+
+                                </div>
+
+
+                                <div class="detail-row">
+
+                                    <span class="detail-label">
+                                        Isi Pengaduan
+                                    </span>
+
+                                    <div class="detail-value">
+                                        ${escapeHtml(
+                                            complaint.isi
+                                        )}
+                                    </div>
+
+                                </div>
+
+
+                                <div class="detail-row">
+
+                                    <span class="detail-label">
+                                        Tanggal
+                                    </span>
+
+                                    <div class="detail-value">
+                                        ${escapeHtml(
+                                            complaint.tanggal
+                                        )}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="reply-title">
+                                Riwayat Balasan
+                            </div>
+
+                            ${repliesHTML}
+
+                        </div>
+
+                    `;
+
+
+                } catch(error) {
+
+                    console.error(error);
+
+                    statusResult.innerHTML = `
+                        <div class="api-error">
+                            Tidak dapat terhubung ke server.
+                            Silakan coba lagi beberapa saat.
+                        </div>
+                    `;
+
+                } finally {
+
+                    checkButton.disabled = false;
+
+                    checkButton.textContent =
+                        "Cek Status";
+
+                }
+
+            }
+        );
+
+
+
+        /* =========================================
+           ESCAPE HTML
+        ========================================= */
+
+        function escapeHtml(value) {
+
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+    </script>
+
+</body>
+</html>
